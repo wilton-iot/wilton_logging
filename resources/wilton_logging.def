@@ -1,0 +1,8 @@
+
+EXPORTS
+    wilton_logger_initialize
+    wilton_logger_log
+    wilton_logger_is_level_enabled
+    wilton_logger_shutdown
+
+    wilton_module_init
