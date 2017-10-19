@@ -25,11 +25,13 @@ staticlib_pkg_check_modules ( ${PROJECT_NAME}_DEPS_PC REQUIRED ${PROJECT_NAME}_D
 # library
 set ( ${PROJECT_NAME}_RESFILE )
 set ( ${PROJECT_NAME}_DEFFILE )
+set ( ${PROJECT_NAME}_ADDITIONAL_LIBS )
 if ( ${CMAKE_SYSTEM_NAME} STREQUAL "Windows" )
     configure_file ( ${WILTON_DIR}/resources/buildres/wilton_module.rc
             ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.rc )
     set ( ${PROJECT_NAME}_RESFILE ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.rc )
     set ( ${PROJECT_NAME}_DEFFILE ${CMAKE_CURRENT_LIST_DIR}/resources/${PROJECT_NAME}.def )
+    set ( ${PROJECT_NAME}_ADDITIONAL_LIBS wtsapi32 )
 endif ( )
 
 add_library ( ${PROJECT_NAME} SHARED
@@ -42,7 +44,8 @@ add_library ( ${PROJECT_NAME} SHARED
         
 target_link_libraries ( ${PROJECT_NAME} PRIVATE
         wilton_core
-        ${${PROJECT_NAME}_DEPS_PC_LIBRARIES} )
+        ${${PROJECT_NAME}_DEPS_PC_LIBRARIES}
+        ${${PROJECT_NAME}_ADDITIONAL_LIBS} )
 
 target_include_directories ( ${PROJECT_NAME} BEFORE PRIVATE 
         ${CMAKE_CURRENT_LIST_DIR}/src
