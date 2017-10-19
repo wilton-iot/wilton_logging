@@ -52,9 +52,19 @@ public:
                     appenders.emplace_back(std::move(ja));
                 }
             } else if ("loggers" == name) {
-                for (const sl::json::value& lo : fi.as_array_or_throw(name)) {
-                    auto jl = logger_config(lo);
-                    loggers.emplace_back(std::move(jl));
+                if (sl::json::type::array == fi.json_type()) {
+                    for (const sl::json::value& lo : fi.as_array()) {
+                        auto jl = logger_config(lo);
+                        loggers.emplace_back(std::move(jl));
+                    }
+                } else if (sl::json::type::object == fi.json_type()) {
+                    for (const sl::json::field& lo : fi.as_object()) {
+                        auto jl = logger_config(lo);
+                        loggers.emplace_back(std::move(jl));
+                    }
+                } else {
+                    throw support::exception(TRACEMSG("Invalid 'logging.loggers' value," +
+                            " type: [" + sl::json::stringify_json_type(fi.json_type()) + "]"));
                 }
             } else {
                 throw support::exception(TRACEMSG("Unknown 'logging' field: [" + name + "]"));

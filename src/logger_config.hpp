@@ -55,6 +55,13 @@ public:
         if (0 == level.length()) throw support::exception(TRACEMSG(
                 "Invalid 'logging.loggers.level' field: []"));
     }
+    
+    logger_config(const sl::json::field& fi) {
+        this->name = fi.name();
+        if (0 == name.length()) throw support::exception(TRACEMSG(
+                "Invalid 'logging.loggers.name' field: []"));
+        this->level = fi.as_string_nonempty_or_throw(this->name);
+    }
 
     sl::json::value to_json() const {
         return {
