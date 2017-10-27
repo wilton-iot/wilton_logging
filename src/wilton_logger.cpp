@@ -60,16 +60,18 @@ class wilton_logger::impl : public staticlib::pimpl::object::impl {
 public:
 
     static void log(const std::string& level_name, const std::string& logger_name, const std::string& message) {
-        const auto& logger = log4cplus::Logger::getInstance(logger_name);
-        log4cplus::LogLevel level = to_level(level_name);
-        if (logger.isEnabledFor(level)) {
-            logger.log(level, message);
+        if (initialized.load(std::memory_order_acquire)) {
+            const auto& logger = log4cplus::Logger::getInstance(logger_name);
+            log4cplus::LogLevel level = to_level(level_name);
+            if (logger.isEnabledFor(level)) {
+                logger.log(level, message);
+            }
         }
     }
 
     static void apply_config(const logging_config& config) {
         bool the_false = false;
-        if (initialized.compare_exchange_strong(the_false, true)) {
+        if (initialized.compare_exchange_strong(the_false, true, std::memory_order_acq_rel)) {
 #ifndef STATICLIB_LINUX
             log4cplus::initialize();
 #endif // STATICLIB_LINUX
