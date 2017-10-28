@@ -31,8 +31,6 @@ namespace logging {
 
 namespace { // anonymous
 
-namespace su = staticlib::utils;
-
 std::atomic_bool initialized{false};
 std::atomic_bool shutted_down{false};
 
