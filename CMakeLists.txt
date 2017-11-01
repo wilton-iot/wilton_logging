@@ -5,7 +5,7 @@ cmake_minimum_required ( VERSION 2.8.12 )
 project ( wilton_logging CXX )
 
 # dependencies add
-if ( STATICLIB_TOOLCHAIN MATCHES "windows_[^_]+_[^_]+" )
+if ( STATICLIB_TOOLCHAIN MATCHES "(android|windows)_.+" )
     staticlib_add_subdirectory ( ${STATICLIB_DEPS}/external_log4cplus )
 endif ( )
 
@@ -26,7 +26,7 @@ staticlib_pkg_check_modules ( ${PROJECT_NAME}_DEPS_PC REQUIRED ${PROJECT_NAME}_D
 set ( ${PROJECT_NAME}_RESFILE )
 set ( ${PROJECT_NAME}_DEFFILE )
 set ( ${PROJECT_NAME}_ADDITIONAL_LIBS )
-if ( ${CMAKE_SYSTEM_NAME} STREQUAL "Windows" )
+if ( STATICLIB_TOOLCHAIN MATCHES "windows_.+" )
     configure_file ( ${WILTON_DIR}/resources/buildres/wilton_module.rc
             ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.rc )
     set ( ${PROJECT_NAME}_RESFILE ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.rc )
@@ -41,7 +41,7 @@ add_library ( ${PROJECT_NAME} SHARED
         ${CMAKE_CURRENT_LIST_DIR}/include/wilton/wilton_logging.h
         ${${PROJECT_NAME}_RESFILE}
         ${${PROJECT_NAME}_DEFFILE} )
-        
+
 target_link_libraries ( ${PROJECT_NAME} PRIVATE
         wilton_core
         ${${PROJECT_NAME}_DEPS_PC_LIBRARIES}
@@ -55,7 +55,9 @@ target_include_directories ( ${PROJECT_NAME} BEFORE PRIVATE
         
 target_compile_options ( ${PROJECT_NAME} PRIVATE ${${PROJECT_NAME}_DEPS_PC_CFLAGS_OTHER} )
 
-if ( ${CMAKE_SYSTEM_NAME} STREQUAL "Windows" )
+if ( STATICLIB_TOOLCHAIN MATCHES "android_.+" )
+    set_property ( TARGET ${PROJECT_NAME} APPEND_STRING PROPERTY LINK_FLAGS "-Wl,-soname,lib${PROJECT_NAME}.so" )
+elseif ( STATICLIB_TOOLCHAIN MATCHES "windows_.+" )
     set_property ( TARGET ${PROJECT_NAME} APPEND_STRING PROPERTY LINK_FLAGS "/manifest:no" )
 endif ( )
 
