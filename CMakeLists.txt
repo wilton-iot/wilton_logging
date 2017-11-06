@@ -30,7 +30,12 @@ if ( STATICLIB_TOOLCHAIN MATCHES "windows_.+" )
     configure_file ( ${WILTON_DIR}/resources/buildres/wilton_module.rc
             ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.rc )
     set ( ${PROJECT_NAME}_RESFILE ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.rc )
-    set ( ${PROJECT_NAME}_DEFFILE ${CMAKE_CURRENT_LIST_DIR}/resources/${PROJECT_NAME}.def )
+    if ( STATICLIB_TOOLCHAIN MATCHES "windows_amd64_.+" )
+        set ( ${PROJECT_NAME}_DEF_POSTFIX amd64 )
+    elseif ( STATICLIB_TOOLCHAIN MATCHES "windows_i386_.+" )
+        set ( ${PROJECT_NAME}_DEF_POSTFIX i386 )
+    endif ( )
+    set ( ${PROJECT_NAME}_DEFFILE ${CMAKE_CURRENT_LIST_DIR}/resources/${PROJECT_NAME}_${${PROJECT_NAME}_DEF_POSTFIX}.def )
     set ( ${PROJECT_NAME}_ADDITIONAL_LIBS wtsapi32 )
 endif ( )
 
