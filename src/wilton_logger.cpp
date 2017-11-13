@@ -69,7 +69,8 @@ public:
 
     static void apply_config(const logging_config& config) {
         bool the_false = false;
-        if (initialized.compare_exchange_strong(the_false, true, std::memory_order_acq_rel)) {
+        if (initialized.compare_exchange_strong(the_false, true, std::memory_order_acq_rel,
+                std::memory_order_relaxed)) {
 #ifndef STATICLIB_LINUX
             log4cplus::initialize();
 #endif // STATICLIB_LINUX
@@ -94,7 +95,8 @@ public:
     
     static void shutdown() {
         bool the_false = false;
-        if (shutted_down.compare_exchange_strong(the_false, true)) {
+        if (shutted_down.compare_exchange_strong(the_false, true,
+                std::memory_order_acq_rel, std::memory_order_relaxed)) {
             log4cplus::Logger::shutdown();
         }
     }
