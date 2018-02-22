@@ -29,7 +29,7 @@
 #include "staticlib/json.hpp"
 #include "staticlib/utils.hpp"
 
-#include "wilton/support/alloc_copy.hpp"
+#include "wilton/support/alloc.hpp"
 
 #include "wilton_logger.hpp"
 #include "logging_config.hpp"

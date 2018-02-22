@@ -39,9 +39,9 @@ namespace wilton {
 namespace logging {
 
 support::buffer initialize(sl::io::span<const char> data) {
-    char* err = wilton_logger_initialize(data.data(), static_cast<int>(data.size()));
+    char* err = wilton_logger_initialize(data.data(), data.size_int());
     if (nullptr != err) support::throw_wilton_error(err, TRACEMSG(std::string(err)));
-    return support::make_empty_buffer();
+    return support::make_null_buffer();
 }
 
 support::buffer log(sl::io::span<const char> data) {
@@ -74,7 +74,7 @@ support::buffer log(sl::io::span<const char> data) {
             logger.c_str(), static_cast<int>(logger.length()),
             message.c_str(), static_cast<int>(message.length()));
     if (nullptr != err) support::throw_wilton_error(err, TRACEMSG(std::string(err)));
-    return support::make_empty_buffer();
+    return support::make_null_buffer();
 }
 
 support::buffer is_level_enabled(sl::io::span<const char> data) {
@@ -112,7 +112,7 @@ support::buffer shutdown(sl::io::span<const char>) {
     // call wilton
     char* err = wilton_logger_shutdown();
     if (nullptr != err) support::throw_wilton_error(err, TRACEMSG(std::string(err)));
-    return support::make_empty_buffer();
+    return support::make_null_buffer();
 }
 
 } // namespace
