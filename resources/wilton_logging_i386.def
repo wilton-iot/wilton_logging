@@ -17,14 +17,5 @@ EXPORTS
     wilton_logger_log
     wilton_logger_is_level_enabled
     wilton_logger_shutdown
-    
-    ; todo: these exports are for vs2013 only, log4cplus sharing should be fixed eventually
-    ?getInstance@Logger@log4cplus@@SA?AV12@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
-    ?isEnabledFor@Logger@log4cplus@@QBE_NH@Z
-    ??0Logger@log4cplus@@QAE@ABV01@@Z
-    ??1Logger@log4cplus@@UAE@XZ
-    ??4Logger@log4cplus@@QAEAAV01@ABV01@@Z
-    ?get_macro_body_oss@detail@log4cplus@@YAAAV?$basic_ostringstream@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ
-    ?macro_forced_log@detail@log4cplus@@YAXABVLogger@2@HABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PBDH2@Z
 
     wilton_module_init
