@@ -48,7 +48,7 @@ namespace logging {
 namespace { // anonymous
 
 std::atomic_bool initialized{false};
-std::atomic_bool shutted_down{false};
+std::atomic_flag shutted_down = ATOMIC_FLAG_INIT;
 
 log4cplus::LogLevel to_level(const std::string& level_name) {
     if ("TRACE" == level_name) {
@@ -110,9 +110,7 @@ public:
     }
     
     static void shutdown() {
-        bool the_false = false;
-        if (shutted_down.compare_exchange_strong(the_false, true,
-                std::memory_order_acq_rel, std::memory_order_relaxed)) {
+        if (!shutted_down.test_and_set(std::memory_order_acq_rel)) {
             log4cplus::Logger::shutdown();
         }
     }
