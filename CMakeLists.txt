@@ -23,6 +23,9 @@ set ( external_log4cplus_ENABLE_PRECONFIGURATION ON CACHE BOOL "" )
 # dependencies add
 if ( STATICLIB_TOOLCHAIN MATCHES "(android|windows|macosx)_.+" )
     staticlib_add_subdirectory ( ${STATICLIB_DEPS}/external_log4cplus )
+elseif ( WILTON_BUILD_FLAVOUR MATCHES "raspbian_.+" )
+    # cannot be linked for raspbian due to older libstdc++ in cross-compiler
+    staticlib_add_subdirectory ( ${STATICLIB_DEPS}/external_log4cplus )
 endif ( )
 
 # dependencies check
