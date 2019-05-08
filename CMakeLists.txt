@@ -21,11 +21,14 @@ project ( wilton_logging CXX )
 set ( external_log4cplus_ENABLE_PRECONFIGURATION ON CACHE BOOL "" )
 
 # dependencies add
+set ( ${PROJECT_NAME}_LOG4CPLUS_STATIC OFF )
 if ( STATICLIB_TOOLCHAIN MATCHES "(android|windows|macosx)_.+" )
     staticlib_add_subdirectory ( ${STATICLIB_DEPS}/external_log4cplus )
+    set ( ${PROJECT_NAME}_LOG4CPLUS_STATIC ON )
 elseif ( WILTON_BUILD_FLAVOUR MATCHES "raspbian_.+" )
     # cannot be linked for raspbian due to older libstdc++ in cross-compiler
     staticlib_add_subdirectory ( ${STATICLIB_DEPS}/external_log4cplus )
+    set ( ${PROJECT_NAME}_LOG4CPLUS_STATIC ON )
 endif ( )
 
 # dependencies check
@@ -78,6 +81,10 @@ target_include_directories ( ${PROJECT_NAME} BEFORE PRIVATE
         ${${PROJECT_NAME}_DEPS_PC_INCLUDE_DIRS} )
         
 target_compile_options ( ${PROJECT_NAME} PRIVATE ${${PROJECT_NAME}_DEPS_PC_CFLAGS_OTHER} )
+
+if ( ${PROJECT_NAME}_LOG4CPLUS_STATIC )
+    target_compile_definitions ( ${PROJECT_NAME} PRIVATE -DWILTON_LOG4CPLUS_STATIC )
+endif ( )
 
 # platform-specific link options
 if ( STATICLIB_TOOLCHAIN MATCHES "android_.+" )

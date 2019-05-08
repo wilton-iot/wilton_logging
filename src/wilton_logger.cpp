@@ -87,9 +87,9 @@ public:
         bool the_false = false;
         if (initialized.compare_exchange_strong(the_false, true, std::memory_order_acq_rel,
                 std::memory_order_relaxed)) {
-#ifndef STATICLIB_LINUX
+#ifdef WILTON_LOG4CPLUS_STATIC
             log4cplus::initialize();
-#endif // STATICLIB_LINUX
+#endif // WILTON_LOG4CPLUS_STATIC
             for (const auto& cf : config.appenders) {
                 log4cplus::SharedAppenderPtr app{create_appender_ptr(cf)};
                 app->setLayout(std::auto_ptr<log4cplus::Layout>(new log4cplus::PatternLayout(cf.layout)));
